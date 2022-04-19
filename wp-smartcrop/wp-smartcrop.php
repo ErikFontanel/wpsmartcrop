@@ -138,19 +138,19 @@ if (!class_exists('WP_Smart_Crop')) {
             if (isset($this->options['focus-mode'])) {
                 $focus_mode = $this->options['focus-mode'];
             } ?>
-			<label>
-				<span><?php _e('Select Focus Mode'); ?></span>
-				<select name='wp-smartcrop-settings[focus-mode]'>
-					<option value="power-lines" <?php selected($focus_mode, 'power-lines'); ?>>Default (Power Lines)</option>
-					<option value="relative-position" <?php selected($focus_mode, 'relative-position'); ?>>Relative Position</option>
-				</select>
-			</label>
-			<p><em>
-				<?php
+            <label>
+                <span><?php _e('Select Focus Mode'); ?></span>
+                <select name='wp-smartcrop-settings[focus-mode]'>
+                    <option value="power-lines" <?php selected($focus_mode, 'power-lines'); ?>>Default (Power Lines)</option>
+                    <option value="relative-position" <?php selected($focus_mode, 'relative-position'); ?>>Relative Position</option>
+                </select>
+            </label>
+            <p><em>
+                <?php
                 _e('Power Lines cropping will attempt to place the focal point at a 33.33%, 50%, or 66.67% position vertically and horizontally, to produce powerful compositions.');
             echo '<br>';
             _e('Relative Position cropping will attempt to maintain the position of the focal point, relative to the cropped dimensions.'); ?></em></p>
-			<?php
+            <?php
         }
 
         public function wp_smartcrop_disable_thumbnail_generation()
@@ -159,14 +159,14 @@ if (!class_exists('WP_Smart_Crop')) {
             if (isset($this->options['disable-thumbnails'])) {
                 $disable_thumbs = $this->options['disable-thumbnails'];
             } ?>
-			<input type='checkbox' name='wp-smartcrop-settings[disable-thumbnails]' <?php checked($disable_thumbs, 1); ?> value='1'>
-			<label for='wp-smartcrop-settings[disable-thumbnails]'><?php _e('Disable thumbnail generation (not recommended)'); ?></label>
-			<p><em>
-				<?php
+            <input type='checkbox' name='wp-smartcrop-settings[disable-thumbnails]' <?php checked($disable_thumbs, 1); ?> value='1'>
+            <label for='wp-smartcrop-settings[disable-thumbnails]'><?php _e('Disable thumbnail generation (not recommended)'); ?></label>
+            <p><em>
+                <?php
                 _e('Disabling thumbnail generation allows you to manage legacy thumbnail cropping with other plugins, such as Manual Image Crop.');
             echo ' ';
             _e('It also will prevent conflicts with plugins like Jetpack\'s Photon CDN, which sadly break thumbnail regeneration.'); ?></em></p>
-			<?php
+            <?php
         }
 
         public function admin_menu()
@@ -185,16 +185,16 @@ if (!class_exists('WP_Smart_Crop')) {
         public function submenu_page()
         {
             ?>
-			<form action='options.php' method='post'>
-				<div class='wrap'>
-					<h1>WP SmartCrop</h1>
-					<?php
+            <form action='options.php' method='post'>
+                <div class='wrap'>
+                    <h1>WP SmartCrop</h1>
+                    <?php
                     settings_fields('wp-smartcrop');
             do_settings_sections('wp-smartcrop');
             submit_button(); ?>
-				</div>
-			</form>
-			<?php
+                </div>
+            </form>
+            <?php
         }
 
         public function wp_handle_upload($file)
@@ -287,59 +287,59 @@ if (!class_exists('WP_Smart_Crop')) {
                 }
                 // build image overlay
                 ob_start(); ?>
-				<div class="wpsmartcrop_preview_wrap" style="max-width: 100%">
-					<?php echo wp_get_attachment_image($post->ID, 'full'); ?>
-					<div class="wpsmartcrop_gnomon">
-						<div class="wpsmartcrop_gnomon_h" style="top:  <?php echo $focus['top']; ?>%;"></div>
-						<div class="wpsmartcrop_gnomon_v" style="left: <?php echo $focus['left']; ?>%;"></div>
-						<div class="wpsmartcrop_gnomon_c" style="top:  <?php echo $focus['top']; ?>%; left: <?php echo $focus['left']; ?>%;"></div>
-					</div>
-				</div>
-				<?php
+                <div class="wpsmartcrop_preview_wrap" style="max-width: 100%">
+                    <?php echo wp_get_attachment_image($post->ID, 'full'); ?>
+                    <div class="wpsmartcrop_gnomon">
+                        <div class="wpsmartcrop_gnomon_h" style="top:  <?php echo $focus['top']; ?>%;"></div>
+                        <div class="wpsmartcrop_gnomon_v" style="left: <?php echo $focus['left']; ?>%;"></div>
+                        <div class="wpsmartcrop_gnomon_c" style="top:  <?php echo $focus['top']; ?>%; left: <?php echo $focus['left']; ?>%;"></div>
+                    </div>
+                </div>
+                <?php
                 $image_overlay = ob_get_clean();
 
                 // build html for form interface
                 ob_start(); ?>
-				<input type="checkbox" class="wpsmartcrop_enabled" id="wpsmartcrop_enabled" name="attachments[<?php echo $post->ID; ?>][_wpsmartcrop_enabled]" value="1"<?php checked($enabled, 1); ?> />
-				<label for="wpsmartcrop_enabled">Enable Smart Cropping</label><br/>
-				<div class="wpsmartcrop_interface<?php echo $enabled_class; ?>">
-					<?php echo $image_overlay; ?>
-					<input type="hidden" class="wpsmartcrop_image_focus_left" name="attachments[<?php echo $post->ID; ?>][_wpsmartcrop_image_focus][left]" value="<?php echo $focus['left']; ?>" />
-					<input type="hidden" class="wpsmartcrop_image_focus_top"  name="attachments[<?php echo $post->ID; ?>][_wpsmartcrop_image_focus][top]"  value="<?php echo $focus['top']; ?>" />
-					<button type="button" class="button wpsmartcrop_edit">Edit Focal Point</button>
-					<script type="template/html" class="wpsmartcrop_editor_template">
-						<div class="wpsmartcrop_editor">
-							<div class="wpsmartcrop_editor_backdrop wpsmartcrop_cancel"></div>
-							<div class="wpsmartcrop_editor_inner">
-								<?php echo $image_overlay; ?>
-								<div class="wpsmartcrop_editor_fields">
-									<h3>Focal Point</h3>
-									<div class="wpsmartcrop_editor_inputs">
-										<label>
-											Left:
-											<span class="wpsmartcrop_percent_wrap">
-												<input type="number" min="0" max="100" step="0.01" class="wpsmartcrop_temp_focus_left" value="" />
-												<span>%</span>
-											</span>
-										</label>
-										<label>
-											Top:
-											<span class="wpsmartcrop_percent_wrap">
-												<input type="number" min="0" max="100" step="0.01" class="wpsmartcrop_temp_focus_top" value="" />
-												<span>%</span>
-											</span>
-										</label>
-										<div class="wpsmartcrop_buttons">
-											<button type="button" class="button wpsmartcrop_cancel">Cancel</button>
-											<button type="button" class="button wpsmartcrop_apply">Apply</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</script>
-				</div>
-				<?php
+                <input type="checkbox" class="wpsmartcrop_enabled" id="wpsmartcrop_enabled" name="attachments[<?php echo $post->ID; ?>][_wpsmartcrop_enabled]" value="1"<?php checked($enabled, 1); ?> />
+                <label for="wpsmartcrop_enabled">Enable Smart Cropping</label><br/>
+                <div class="wpsmartcrop_interface<?php echo $enabled_class; ?>">
+                    <?php echo $image_overlay; ?>
+                    <input type="hidden" class="wpsmartcrop_image_focus_left" name="attachments[<?php echo $post->ID; ?>][_wpsmartcrop_image_focus][left]" value="<?php echo $focus['left']; ?>" />
+                    <input type="hidden" class="wpsmartcrop_image_focus_top"  name="attachments[<?php echo $post->ID; ?>][_wpsmartcrop_image_focus][top]"  value="<?php echo $focus['top']; ?>" />
+                    <button type="button" class="button wpsmartcrop_edit">Edit Focal Point</button>
+                    <script type="template/html" class="wpsmartcrop_editor_template">
+                        <div class="wpsmartcrop_editor">
+                            <div class="wpsmartcrop_editor_backdrop wpsmartcrop_cancel"></div>
+                            <div class="wpsmartcrop_editor_inner">
+                                <?php echo $image_overlay; ?>
+                                <div class="wpsmartcrop_editor_fields">
+                                    <h3>Focal Point</h3>
+                                    <div class="wpsmartcrop_editor_inputs">
+                                        <label>
+                                            Left:
+                                            <span class="wpsmartcrop_percent_wrap">
+                                                <input type="number" min="0" max="100" step="0.01" class="wpsmartcrop_temp_focus_left" value="" />
+                                                <span>%</span>
+                                            </span>
+                                        </label>
+                                        <label>
+                                            Top:
+                                            <span class="wpsmartcrop_percent_wrap">
+                                                <input type="number" min="0" max="100" step="0.01" class="wpsmartcrop_temp_focus_top" value="" />
+                                                <span>%</span>
+                                            </span>
+                                        </label>
+                                        <div class="wpsmartcrop_buttons">
+                                            <button type="button" class="button wpsmartcrop_cancel">Cancel</button>
+                                            <button type="button" class="button wpsmartcrop_apply">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                </div>
+                <?php
                 $focal_point_html = ob_get_clean();
                 $form_fields = [
                     'wpsmartcrop_image_focal_point' => [
@@ -689,28 +689,28 @@ if (!class_exists('WP_Smart_Crop')) {
             if ($selfclosing) {
                 $tag_pattern =
                     '@<(?P<tag>' . $tag . ')           # <tag
-					(?P<attributes>\s[^>]+)?       # attributes, if any
-					\s*/?>                   # /> or just >, being lenient here
-					@xsi';
+                    (?P<attributes>\s[^>]+)?       # attributes, if any
+                    \s*/?>                   # /> or just >, being lenient here
+                    @xsi';
             } else {
                 $tag_pattern =
                     '@<(?P<tag>' . $tag . ')           # <tag
-					(?P<attributes>\s[^>]+)?       # attributes, if any
-					\s*>                 # >
-					(?P<contents>.*?)         # tag contents
-					</(?P=tag)>               # the closing </tag>
-					@xsi';
+                    (?P<attributes>\s[^>]+)?       # attributes, if any
+                    \s*>                 # >
+                    (?P<contents>.*?)         # tag contents
+                    </(?P=tag)>               # the closing </tag>
+                    @xsi';
             }
             $attribute_pattern =
                 '@
-				(?P<name>\w+)                         # attribute name
-				\s*=\s*
-				(
-					(?P<quote>[\"\'])(?P<value_quoted>.*?)(?P=quote)    # a quoted value
-					|                           # or
-					(?P<value_unquoted>[^\s"\']+?)(?:\s+|$)           # an unquoted value (terminated by whitespace or EOF)
-				)
-				@xsi';
+                (?P<name>\w+)                         # attribute name
+                \s*=\s*
+                (
+                    (?P<quote>[\"\'])(?P<value_quoted>.*?)(?P=quote)    # a quoted value
+                    |                           # or
+                    (?P<value_unquoted>[^\s"\']+?)(?:\s+|$)           # an unquoted value (terminated by whitespace or EOF)
+                )
+                @xsi';
             //Find all tags
             if (!preg_match_all($tag_pattern, $html, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE)) {
                 //Return an empty array if we didn't find anything
