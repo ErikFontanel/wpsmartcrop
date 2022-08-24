@@ -3,7 +3,7 @@
  * Plugin Name: WP SmartCrop
  * Plugin URI: https://www.wpsmartcrop.com/
  * Description: Style your images exactly how you want them to appear, for any screen size, and never get a cut-off face.
- * Version: 2.0.6
+ * Version: 2.0.5
  * Author: Bytes.co
  * Author URI: https://bytes.co
  * License: GPLv2 or later
@@ -50,7 +50,7 @@ if( !class_exists('WP_Smart_Crop') ) {
 			add_action( 'edit_attachment' , array( $this, 'edit_attachment'  ) );
 
 			// Editor Functions
-			add_action( 'wp_enqueue_media'         , array( $this, 'wp_enqueue_media' ) );
+			add_action( 'wp_enqueue_editor'         , array( $this, 'wp_enqueue_editor' ) );
 			add_filter( 'attachment_fields_to_edit', array( $this, 'attachment_fields_to_edit' ), 10, 2 );
 
 			// Thumbnail Crop Functions (for legacy theme support and hard-crop applications)
@@ -233,7 +233,7 @@ if( !class_exists('WP_Smart_Crop') ) {
 			}
 		}
 
-		function wp_enqueue_media() {
+		function wp_enqueue_editor() {
 			wp_enqueue_script( 'wp-smartcrop-media-library', $this->plugin_dir_url . 'js/media-library.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_style( 'wp-smartcrop-media-library', $this->plugin_dir_url . 'css/media-library.css', array(), $this->version );
 		}
@@ -273,8 +273,7 @@ if( !class_exists('WP_Smart_Crop') ) {
 				ob_start();
 				?>
 				<div class="wpsmartcrop_preview_wrap" style="max-width: <?php echo 3 * $width; ?>px;">
-					<!-- <?php echo wp_get_attachment_image( $post->ID, 'full' ); ?> -->
-					<img <?php echo get_timber_image($post->ID, 'full'); ?>/>
+					<?php echo wp_get_attachment_image( $post->ID, 'image_full' ); ?>
 					<div class="wpsmartcrop_gnomon">
 						<div class="wpsmartcrop_gnomon_h" style="top:  <?php echo $focus['top'];  ?>%;"></div>
 						<div class="wpsmartcrop_gnomon_v" style="left: <?php echo $focus['left']; ?>%;"></div>
@@ -411,7 +410,7 @@ if( !class_exists('WP_Smart_Crop') ) {
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'jquery.wp-smartcrop', $this->plugin_dir_url . 'js/jquery.wp-smartcrop.min.js', array( 'jquery' ), $this->version, true );
 			wp_localize_script( 'jquery.wp-smartcrop', 'wpsmartcrop_options', array(
-				'focus_mode' => ( is_array($this->options) && !empty($this->options['focus-mode']) ) ? $this->options['focus-mode'] : 'power-lines'
+				'focus_mode' => $this->options['focus-mode']
 			) );
 			wp_enqueue_style( 'wp-smart-crop-renderer', $this->plugin_dir_url . 'css/image-renderer.css', array(), $this->version );
 		}
